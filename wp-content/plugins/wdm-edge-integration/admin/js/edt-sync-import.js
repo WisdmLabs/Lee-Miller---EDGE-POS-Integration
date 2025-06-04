@@ -49,7 +49,8 @@ jQuery(document).ready(function($) {
                 type: 'POST',
                 data: {
                     action: 'edt_sync_import_customers',
-                    chunk: chunkIndex
+                    chunk: chunkIndex,
+                    nonce: edtSyncAjax.nonce
                 },
                 success: function(response) {
                     if (response.success) {
