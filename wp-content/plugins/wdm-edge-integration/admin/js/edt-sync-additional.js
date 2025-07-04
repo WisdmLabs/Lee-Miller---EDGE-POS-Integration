@@ -133,46 +133,50 @@ jQuery(document).ready(function($) {
         $(selectId).on('change', () => toggleCustomMinutes(selectId, containerId));
     });
 
-    // Initialize product import handler
-    new ChunkedOperation({
-        action: 'edge_import_products',
-        buttonId: '#import-products',
-        statusId: '#product-import-status',
-        progressContainerId: '#progress-container',
-        progressBarId: '#progress-bar',
-        progressTextId: '#progress-text',
-        onComplete: (data) => {
-            const statsHtml = `
-                <p>Product import completed successfully.</p>
-                <ul>
-                    <li>Total: ${data.stats.total}</li>
-                    <li>Created: ${data.stats.created}</li>
-                    <li>Updated: ${data.stats.updated}</li>
-                    <li>Skipped: ${data.stats.skipped}</li>
-                </ul>`;
-            $('#product-import-status').html(statsHtml);
-            updateProductStatistics(data.stats);
-        }
-    });
+    // Create and store chunked operation handlers
+    const operations = {
+        productImport: new ChunkedOperation({
+            action: 'edge_import_products',
+            buttonId: '#import-products',
+            statusId: '#product-import-status',
+            progressContainerId: '#progress-container',
+            progressBarId: '#progress-bar',
+            progressTextId: '#progress-text',
+            onComplete: (data) => {
+                const statsHtml = `
+                    <p>Product import completed successfully.</p>
+                    <ul>
+                        <li>Total: ${data.stats.total}</li>
+                        <li>Created: ${data.stats.created}</li>
+                        <li>Updated: ${data.stats.updated}</li>
+                        <li>Skipped: ${data.stats.skipped}</li>
+                    </ul>`;
+                $('#product-import-status').html(statsHtml);
+                updateProductStatistics(data.stats);
+            }
+        }),
 
-    // Initialize existing users sync handler
-    new ChunkedOperation({
-        action: 'edge_sync_existing_users',
-        buttonId: '#sync-existing-users',
-        statusId: '#sync-existing-status',
-        progressContainerId: '#sync-progress-container',
-        progressBarId: '#sync-progress-bar',
-        progressTextId: '#sync-progress-text',
-        onComplete: (data) => {
-            const statsHtml = `
-                <p>Existing users sync completed successfully.</p>
-                <ul>
-                    <li>Total Users Checked: ${data.stats.total}</li>
-                    <li>Already Synced: ${data.stats.already_synced}</li>
-                    <li>Newly Synced to EDGE: ${data.stats.synced}</li>
-                    <li>Skipped: ${data.stats.skipped}</li>
-                </ul>`;
-            $('#sync-existing-status').html(statsHtml);
-        }
-    });
+        userSync: new ChunkedOperation({
+            action: 'edge_sync_existing_users',
+            buttonId: '#sync-existing-users',
+            statusId: '#sync-existing-status',
+            progressContainerId: '#sync-progress-container',
+            progressBarId: '#sync-progress-bar',
+            progressTextId: '#sync-progress-text',
+            onComplete: (data) => {
+                const statsHtml = `
+                    <p>Existing users sync completed successfully.</p>
+                    <ul>
+                        <li>Total Users Checked: ${data.stats.total}</li>
+                        <li>Already Synced: ${data.stats.already_synced}</li>
+                        <li>Newly Synced to EDGE: ${data.stats.synced}</li>
+                        <li>Skipped: ${data.stats.skipped}</li>
+                    </ul>`;
+                $('#sync-existing-status').html(statsHtml);
+            }
+        })
+    };
+
+    // Export operations for potential external use or debugging
+    window.edgeOperations = operations;
 }); 
