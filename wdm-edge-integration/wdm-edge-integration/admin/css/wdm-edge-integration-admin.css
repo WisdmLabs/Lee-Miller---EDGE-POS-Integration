@@ -1,0 +1,664 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+/* SFTP Folder Browser UI Enhancements */
+#edge-sftp-folder-browser {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+#edge-sftp-breadcrumbs {
+  background: #f7f7f7;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+#edge-sftp-breadcrumbs a {
+  color: #0073aa;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 2px;
+}
+#edge-sftp-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+#edge-sftp-folder-list ul {
+  padding-left: 0;
+}
+.edge-sftp-folder-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.edge-sftp-folder-item:hover {
+  background: #f0f6fb;
+}
+.edge-sftp-folder-icon {
+  margin-right: 10px;
+  color: #ffb300;
+  font-size: 18px;
+}
+.edge-sftp-folder-up {
+  color: #888;
+  font-style: italic;
+}
+#edge-sftp-select-folder {
+  background: #0073aa;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 18px;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+#edge-sftp-select-folder:hover {
+  background: #005177;
+}
+#edge-sftp-selected-folder {
+  margin-top: 12px;
+  font-size: 15px;
+  color: #0073aa;
+  font-weight: 500;
+}
+.sftp-loading-spinner {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #e2e2e2;
+  border-top: 3px solid #0073aa;
+  border-radius: 50%;
+  animation: sftp-spin 1s linear infinite;
+  margin-right: 8px;
+}
+@keyframes sftp-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ======================================================================================== */
+/* EDT Sync Dashboard Styles - Previously Inline CSS */
+/* ======================================================================================== */
+
+/* Main container styling */
+.edt-sync-container {
+    max-width: 1200px;
+}
+
+/* Dashboard card styling */
+.edt-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 25px;
+    position: relative;
+    border-left: 5px solid #0073aa;
+    transition: all 0.3s ease;
+}
+
+.edt-card:hover {
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* Product-specific styling */
+.edt-sync-products-page .edt-card {
+    border-left-color: #0073aa;
+}
+
+/* Customer-specific styling */
+.edt-sync-customers-page .edt-card {
+    border-left-color: #0073aa;
+}
+
+/* SFTP-specific styling */
+.edt-sftp-setup-page .edt-card {
+    border-left-color: #0073aa;
+}
+
+/* SFTP card header icon */
+.edt-sftp-setup-page .edt-card h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm-.71-5.29c.07.05.14.1.23.15l-.02.02L14 13l-3.03-3.19L10 9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1c0 .1-.03.19-.06.28l2.54 2.25c.01-.17.06-.34.06-.53 0-1.66-1.34-3-3-3S7.34 7.34 7.34 9c0 1.66 1.34 3 3 3 .1 0 .2-.03.29-.05l.91.95z"/></svg>');
+}
+
+/* SFTP button styling */
+.edt-sftp-setup-page .edt-button {
+    background-color: #0073aa;
+    color: white !important;
+}
+
+.edt-sftp-setup-page .edt-button:hover {
+    background-color: #005177;
+}
+
+/* Page title action button */
+.page-title-action {
+    margin-left: 10px;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 #ccc;
+    color: #555;
+    display: inline-block;
+    font-size: 13px;
+    line-height: 26px;
+    height: 28px;
+    margin: 0;
+    padding: 0 10px 1px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+}
+
+.page-title-action:hover {
+    background: #fafafa;
+    border-color: #999;
+    color: #23282d;
+}
+
+.edt-card h2 {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    color: #23282d;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.edt-card h2:before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.7;
+}
+
+.edt-card h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 12H9v-2h2v2zm0-4H9V6h2v4z"/></svg>');
+}
+
+/* Product card header icon */
+.edt-sync-products-page .edt-card h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M11 7H9V5h2v2zm0 0h2v6h-2V7zM7 7h2v6H7V7zm8-2h-1V3H6v2H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h1v2h8v-2h1c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"/></svg>');
+}
+
+/* Customer card header icon */
+.edt-sync-customers-page .edt-card h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M10 9.25c-2.27 0-2.73-3.44-2.73-3.44C7 4.02 7.82 2 9.97 2c2.16 0 2.98 2.02 2.71 3.81 0 0-.41 3.44-2.68 3.44zm0 2.57L12.72 10c2.39 0 4.52 2.33 4.52 4.53v2.49s-3.65 1.13-7.24 1.13c-3.65 0-7.24-1.13-7.24-1.13v-2.49c0-2.25 1.94-4.48 4.47-4.48z"/></svg>');
+}
+
+.edt-card-content {
+    padding: 15px 0;
+}
+
+/* Button styling */
+.edt-button {
+    background-color: #0073aa;
+    border: none;
+    border-radius: 4px;
+    color: white !important;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.edt-button:hover {
+    background-color: #005177;
+}
+
+/* Product-specific button */
+.edt-sync-products-page .edt-button {
+    background-color: #0073aa;
+}
+
+.edt-sync-products-page .edt-button:hover {
+    background-color: #005177;
+}
+
+/* Progress bar styling */
+#progress-container {
+    margin-top: 20px;
+}
+
+.progress-bar-wrapper {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    height: 25px;
+    width: 100%;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    background-color: #0073aa;
+    height: 25px;
+    width: 0%;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    transition: width 0.3s;
+    font-size: 12px;
+}
+
+.edt-sync-products-page #progress-bar {
+    background-color: #0073aa;
+}
+
+#progress-text {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 13px;
+    color: #555;
+}
+
+/* Form styling */
+.edt-form-row {
+    margin-bottom: 15px;
+}
+
+.edt-form-row label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.edt-form-row input[type='text'],
+.edt-form-row input[type='number'],
+.edt-form-row select {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.edt-form-row .description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+/* Custom minutes field */
+.custom-minutes-container {
+    display: none;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+/* Stats box */
+.import-stats {
+    margin-top: 15px;
+    background: #f8f8f8;
+    padding: 15px;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
+}
+
+.edt-sync-products-page .import-stats {
+    border-left-color: #0073aa;
+}
+
+.import-stats h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #23282d;
+    font-size: 16px;
+}
+
+.import-stats ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.import-stats li {
+    margin-bottom: 5px;
+}
+
+/* Animation for import status */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#import-status, #product-import-status {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 782px) {
+    .edt-card {
+        padding: 15px;
+    }
+    
+    .edt-form-row input[type='text'],
+    .edt-form-row input[type='number'],
+    .edt-form-row select {
+        max-width: 100%;
+    }
+}
+
+/* Customer-specific styling */
+.edt-sync-customers-page .edt-card {
+    border-left-color: #0073aa;
+}
+
+/* Sync existing users specific styling */
+.edt-sync-existing-card {
+    border-left-color: #0073aa !important;
+}
+
+.edt-sync-existing-card h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1 12.59L5.41 11 4 12.41l5 5 9-9L16.59 7 9 14.59z"/></svg>') !important;
+}
+
+.edt-sync-customers-page .edt-card:has(#sync-existing-users) {
+    border-left-color: #0073aa;
+}
+
+.edt-sync-customers-page .edt-card:has(#sync-existing-users) h2:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%230073aa" d="M10 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1 12.59L5.41 11 4 12.41l5 5 9-9L16.59 7 9 14.59z"/></svg>');
+}
+
+.edt-sync-customers-page #sync-existing-users {
+    background-color: #0073aa;
+}
+
+.edt-sync-customers-page #sync-existing-users:hover {
+    background-color: #005177;
+}
+
+/* Sync progress bar styling */
+#sync-progress-container {
+    margin-top: 20px;
+}
+
+#sync-progress-bar {
+    background-color: #0073aa;
+    height: 25px;
+    width: 0%;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    transition: width 0.3s;
+    font-size: 12px;
+}
+
+/* Sync existing users settings form styling */
+.edt-sync-existing-card form {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #e1e5e9;
+    margin-bottom: 20px;
+}
+
+.edt-sync-existing-card form .edt-form-row {
+    margin-bottom: 15px;
+}
+
+.edt-sync-existing-card form .edt-button {
+    background-color: #0073aa !important;
+    margin-top: 10px;
+}
+
+.edt-sync-existing-card form .edt-button:hover {
+    background-color: #005177 !important;
+}
+
+/* SFTP Setup Page Specific Styling */
+.edt-sftp-setup-page .current-folder-display {
+    background: #f8f9fa;
+    border: 1px solid #e1e5e9;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edt-sftp-setup-page .folder-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edt-sftp-setup-page .folder-info code {
+    background: #fff;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    font-family: monospace;
+}
+
+.edt-sftp-setup-page .folder-browser {
+    border: 1px solid #e1e5e9;
+    border-radius: 5px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.edt-sftp-setup-page .folder-browser-header {
+    background: #f8f9fa;
+    padding: 15px;
+    border-bottom: 1px solid #e1e5e9;
+    border-radius: 5px 5px 0 0;
+}
+
+.edt-sftp-setup-page .folder-browser-header h3 {
+    margin: 0 0 5px 0;
+    color: #23282d;
+}
+
+.edt-sftp-setup-page .breadcrumbs {
+    padding: 10px 15px;
+    background: #f1f1f1;
+    border-bottom: 1px solid #e1e5e9;
+    font-size: 13px;
+}
+
+.edt-sftp-setup-page .breadcrumb-trail {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.edt-sftp-setup-page .breadcrumb-item a {
+    color: #0073aa;
+    text-decoration: none;
+    padding: 2px 4px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.edt-sftp-setup-page .breadcrumb-item a:hover {
+    background: #e1e5e9;
+}
+
+.edt-sftp-setup-page .breadcrumb-separator {
+    margin: 0 5px;
+    color: #666;
+}
+
+.edt-sftp-setup-page .folder-list {
+    padding: 15px;
+    min-height: 200px;
+}
+
+.edt-sftp-setup-page .folder-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.edt-sftp-setup-page .folder-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.edt-sftp-setup-page .folder-item:hover {
+    background: #f8f9fa;
+}
+
+.edt-sftp-setup-page .folder-item.folder-up {
+    background: #e8f4f8;
+    border: 1px solid #b8dce8;
+}
+
+.edt-sftp-setup-page .folder-item.no-folders {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.edt-sftp-setup-page .folder-icon {
+    margin-right: 8px;
+    color: #0073aa;
+}
+
+.edt-sftp-setup-page .folder-link {
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.edt-sftp-setup-page .folder-link:hover {
+    text-decoration: underline;
+}
+
+.edt-sftp-setup-page .folder-loading,
+.edt-sftp-setup-page .folder-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.edt-sftp-setup-page .folder-error {
+    color: #d63638;
+}
+
+.edt-sftp-setup-page .folder-selection-actions {
+    padding: 15px;
+    border-top: 1px solid #e1e5e9;
+    background: #f8f9fa;
+    border-radius: 0 0 5px 5px;
+}
+
+.edt-sftp-setup-page .selected-folder {
+    margin-top: 10px;
+    padding: 10px;
+    background: #d1edff;
+    border: 1px solid #a7d0e4;
+    border-radius: 4px;
+    color: #0073aa;
+}
+
+.edt-sftp-setup-page .test-result {
+    padding: 10px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.edt-sftp-setup-page .test-result.success {
+    background: #d1edff;
+    border: 1px solid #a7d0e4;
+    color: #0073aa;
+}
+
+.edt-sftp-setup-page .test-result.error {
+    background: #fcf2f2;
+    border: 1px solid #f1a7a7;
+    color: #d63638;
+}
+
+.edt-sftp-setup-page .test-result.testing {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.edt-sftp-setup-page .status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.edt-sftp-setup-page .status-configured {
+    background: #d1edff;
+    border: 1px solid #a7d0e4;
+    color: #0073aa;
+}
+
+.edt-sftp-setup-page .status-incomplete {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.edt-sftp-setup-page .status-details {
+    margin-left: 25px;
+    color: #666;
+}
+
+.edt-sftp-setup-page .status-details p {
+    margin: 5px 0;
+}
+
+/* Spinning animation for loading states */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.edt-sftp-setup-page .spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive adjustments for SFTP page */
+@media screen and (max-width: 782px) {
+    .edt-sftp-setup-page .current-folder-display {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .edt-sftp-setup-page .breadcrumb-trail {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

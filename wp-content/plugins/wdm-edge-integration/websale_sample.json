@@ -1,0 +1,45 @@
+{
+    "CustomerWebId": "21",
+    "WebSaleId": "WebSale-103333",
+    "SaleEmail": "judy@email.com",
+    "SalePhone": "2034569876",
+    "TotalWithTax": 1429.46,
+    "BillingAddress": {
+      "Street1": "1 Main St",
+      "Street2": "",
+      "City": "Shelton",
+      "State": "CT",
+      "Zip": "06484",
+      "Country": ""
+    },
+    "ShippingAddress": {
+      "Street1": "3 Corporate Dr",
+      "Street2": "",
+      "City": "Shelton",
+      "State": "CT",
+      "Zip": "06484",
+      "Country": ""
+    },
+    "ShippingAmt": 15,
+    "SoldItems": [
+      {
+        "ItemSku": "001-150-00003",
+        "SalePrice": 915
+      },
+      {
+        "ItemSku": "001-200-00001",
+        "SalePrice": 415
+      }
+    ],
+    "Payments": [
+      {
+        "PaymentType": "CC",
+        "PaymentAmount": 1429.46,
+        "PaymentSubType": "Visa",
+        "Last4": "1234",
+        "Expires": "0625",
+        "FirstName": "Dominick",
+        "LastName": "Mastri"
+      }
+    ]
+  }
