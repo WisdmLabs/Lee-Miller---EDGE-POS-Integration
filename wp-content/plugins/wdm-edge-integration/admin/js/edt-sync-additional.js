@@ -1,181 +1,178 @@
 jQuery(document).ready(function($) {
+    // Utility class for managing chunked operations
+    class ChunkedOperation {
+        constructor(config) {
+            this.config = {
+                action: '',
+                buttonId: '',
+                statusId: '',
+                progressContainerId: '',
+                progressBarId: '',
+                progressTextId: '',
+                onComplete: null,
+                ...config
+            };
+            this.initializeHandlers();
+        }
+
+        initializeHandlers() {
+            $(this.config.buttonId).on('click', () => this.start());
+        }
+
+        updateProgress(progress, message) {
+            $(this.config.progressBarId).css('width', progress + '%').text(progress + '%');
+            $(this.config.progressTextId).text(message);
+        }
+
+        updateStatus(html) {
+            $(this.config.statusId).html(html);
+        }
+
+        toggleButton(enabled) {
+            $(this.config.buttonId).prop('disabled', !enabled);
+        }
+
+        showProgress() {
+            $(this.config.progressContainerId).show();
+            this.updateProgress(0, 'Starting...');
+        }
+
+        hideProgress() {
+            setTimeout(() => {
+                $(this.config.progressContainerId).fadeOut(500);
+            }, 2000);
+        }
+
+        handleError(message) {
+            this.updateStatus('<p>Error: ' + message + '</p>');
+            $(this.config.progressContainerId).hide();
+            this.toggleButton(true);
+        }
+
+        processChunk(chunk = 0) {
+            $.ajax({
+                url: edtSyncAjax.ajax_url,
+                type: 'POST',
+                data: {
+                    action: this.config.action,
+                    chunk: chunk,
+                    nonce: edtSyncAjax.nonce
+                },
+                success: (response) => this.handleResponse(response, chunk),
+                error: () => this.handleError('Could not complete the operation. Please check the logs.')
+            });
+        }
+
+        handleResponse(response, chunk) {
+            if (!response.success) {
+                this.handleError(response.data);
+                return;
+            }
+
+            if (response.data.isComplete) {
+                this.handleCompletion(response.data);
+            } else {
+                this.handleProgress(response.data);
+                setTimeout(() => this.processChunk(response.data.nextChunk), 100);
+            }
+        }
+
+        handleCompletion(data) {
+            this.updateProgress(100, 'Operation completed!');
+            if (this.config.onComplete) {
+                this.config.onComplete(data);
+            }
+            this.toggleButton(true);
+            this.hideProgress();
+        }
+
+        handleProgress(data) {
+            this.updateProgress(
+                data.progress,
+                data.message + ' (' + data.stats.processed + ' processed)'
+            );
+        }
+
+        start() {
+            this.toggleButton(false);
+            this.showProgress();
+            this.processChunk(0);
+        }
+    }
+
     // Function to update product statistics dynamically
     function updateProductStatistics(stats) {
-        // Update the statistics in the Product Statistics section
-        var statsContainer = $('.edt-sync-products-page .import-stats').last();
+        const statsContainer = $('.edt-sync-products-page .import-stats').last();
         if (statsContainer.length) {
-            var statsHtml = '<h3>Last Import</h3>' +
-                '<ul>' +
-                '<li><strong>Created:</strong> ' + stats.created + '</li>' +
-                '<li><strong>Updated:</strong> ' + stats.updated + '</li>' +
-                '<li><strong>Skipped:</strong> ' + stats.skipped + '</li>' +
-                '</ul>';
+            const statsHtml = `
+                <h3>Last Import</h3>
+                <ul>
+                    <li><strong>Created:</strong> ${stats.created}</li>
+                    <li><strong>Updated:</strong> ${stats.updated}</li>
+                    <li><strong>Skipped:</strong> ${stats.skipped}</li>
+                </ul>`;
             statsContainer.html(statsHtml);
         }
     }
-    
-    // Function to toggle custom minutes field for customers
-    function toggleCustomerCustomMinutes() {
-        var selected = $('#edge_customer_cron_interval').val();
-        if (selected === 'edge_customer_custom_minutes') {
-            $('#customer-custom-minutes-container').show();
-        } else {
-            $('#customer-custom-minutes-container').hide();
-        }
+
+    // Function to toggle custom minutes field
+    function toggleCustomMinutes(selectId, containerId) {
+        const selected = $(selectId).val();
+        $(containerId).toggle(selected === selectId.replace('#', '') + '_custom_minutes');
     }
-    
-    // Function to toggle custom minutes field for products
-    function toggleProductCustomMinutes() {
-        var selected = $('#edge_product_cron_interval').val();
-        if (selected === 'edge_product_custom_minutes') {
-            $('#product-custom-minutes-container').show();
-        } else {
-            $('#product-custom-minutes-container').hide();
-        }
-    }
-    
-    // Initialize form visibility on page load
-    toggleCustomerCustomMinutes();
-    toggleProductCustomMinutes();
-    
-    // Handle changes to select fields
-    $('#edge_customer_cron_interval').on('change', toggleCustomerCustomMinutes);
-    $('#edge_product_cron_interval').on('change', toggleProductCustomMinutes);
-    
-    // Handle product import button click with chunked processing
-    $('#import-products').on('click', function() {
-        var button = $(this);
-        button.prop('disabled', true);
-        $('#product-import-status').html('<p>Importing products... This may take a few minutes.</p>');
+
+    // Initialize form visibility and handlers
+    ['customer', 'product'].forEach(type => {
+        const selectId = `#edge_${type}_cron_interval`;
+        const containerId = `#${type}-custom-minutes-container`;
         
-        // Show progress container
-        $('#progress-container').show();
-        $('#progress-bar').css('width', '0%').text('0%');
-        $('#progress-text').text('Starting import...');
+        // Initialize visibility
+        toggleCustomMinutes(selectId, containerId);
         
-        // Start chunked import process
-        function processProductChunk(chunk = 0) {
-            $.ajax({
-                url: edtSyncAjax.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'edge_import_products',
-                    chunk: chunk,
-                    nonce: edtSyncAjax.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        if (response.data.isComplete) {
-                            // Import completed
-                            $('#progress-bar').css('width', '100%').text('100%');
-                            $('#progress-text').text('Import completed!');
-                            $('#product-import-status').html('<p>Product import completed successfully.</p><ul>' +
-                                '<li>Total: ' + response.data.stats.total + '</li>' +
-                                '<li>Created: ' + response.data.stats.created + '</li>' +
-                                '<li>Updated: ' + response.data.stats.updated + '</li>' +
-                                '<li>Skipped: ' + response.data.stats.skipped + '</li>' +
-                            '</ul>');
-                            button.prop('disabled', false);
-                            
-                            // Update statistics dynamically instead of page reload
-                            updateProductStatistics(response.data.stats);
-                            
-                            // Hide progress container with smooth fade after showing completion
-                            setTimeout(function() {
-                                $('#progress-container').fadeOut(500);
-                            }, 2000);
-                        } else {
-                            // Continue with next chunk
-                            $('#progress-bar').css('width', response.data.progress + '%').text(response.data.progress + '%');
-                            $('#progress-text').text(response.data.message + ' (' + response.data.stats.processed + ' processed)');
-                            
-                            // Process next chunk after a short delay
-                            setTimeout(function() {
-                                processProductChunk(response.data.nextChunk);
-                            }, 100);
-                        }
-                    } else {
-                        $('#product-import-status').html('<p>Error: ' + response.data + '</p>');
-                        $('#progress-container').hide();
-                        button.prop('disabled', false);
-                    }
-                },
-                error: function() {
-                    $('#product-import-status').html('<p>Error: Could not complete the import. Please check the logs.</p>');
-                    $('#progress-container').hide();
-                    button.prop('disabled', false);
-                }
-            });
-        }
-        
-        // Start the import
-        processProductChunk(0);
+        // Set up change handler
+        $(selectId).on('change', () => toggleCustomMinutes(selectId, containerId));
     });
-    
-    // Handle sync existing users button click
-    $('#sync-existing-users').on('click', function() {
-        var button = $(this);
-        button.prop('disabled', true);
-        $('#sync-existing-status').html('<p>Checking existing WordPress users... This may take a few minutes.</p>');
-        
-        // Show progress container
-        $('#sync-progress-container').show();
-        $('#sync-progress-bar').css('width', '0%').text('0%');
-        $('#sync-progress-text').text('Starting sync...');
-        
-        // Start chunked sync process
-        function processSyncChunk(chunk = 0) {
-            $.ajax({
-                url: edtSyncAjax.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'edge_sync_existing_users',
-                    chunk: chunk,
-                    nonce: edtSyncAjax.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        if (response.data.isComplete) {
-                            // Sync completed
-                            $('#sync-progress-bar').css('width', '100%').text('100%');
-                            $('#sync-progress-text').text('Sync completed!');
-                            $('#sync-existing-status').html('<p>Existing users sync completed successfully.</p><ul>' +
-                                '<li>Total Users Checked: ' + response.data.stats.total + '</li>' +
-                                '<li>Already Synced: ' + response.data.stats.already_synced + '</li>' +
-                                '<li>Newly Synced to EDGE: ' + response.data.stats.synced + '</li>' +
-                                '<li>Skipped: ' + response.data.stats.skipped + '</li>' +
-                            '</ul>');
-                            button.prop('disabled', false);
-                            
-                            // Hide progress container with smooth fade after showing completion
-                            setTimeout(function() {
-                                $('#sync-progress-container').fadeOut(500);
-                            }, 2000);
-                        } else {
-                            // Continue with next chunk
-                            $('#sync-progress-bar').css('width', response.data.progress + '%').text(response.data.progress + '%');
-                            $('#sync-progress-text').text(response.data.message + ' (' + response.data.stats.processed + ' processed)');
-                            
-                            // Process next chunk after a short delay
-                            setTimeout(function() {
-                                processSyncChunk(response.data.nextChunk);
-                            }, 100);
-                        }
-                    } else {
-                        $('#sync-existing-status').html('<p>Error: ' + response.data + '</p>');
-                        $('#sync-progress-container').hide();
-                        button.prop('disabled', false);
-                    }
-                },
-                error: function() {
-                    $('#sync-existing-status').html('<p>Error: Could not complete the sync. Please check the logs.</p>');
-                    $('#sync-progress-container').hide();
-                    button.prop('disabled', false);
-                }
-            });
+
+    // Initialize product import handler
+    new ChunkedOperation({
+        action: 'edge_import_products',
+        buttonId: '#import-products',
+        statusId: '#product-import-status',
+        progressContainerId: '#progress-container',
+        progressBarId: '#progress-bar',
+        progressTextId: '#progress-text',
+        onComplete: (data) => {
+            const statsHtml = `
+                <p>Product import completed successfully.</p>
+                <ul>
+                    <li>Total: ${data.stats.total}</li>
+                    <li>Created: ${data.stats.created}</li>
+                    <li>Updated: ${data.stats.updated}</li>
+                    <li>Skipped: ${data.stats.skipped}</li>
+                </ul>`;
+            $('#product-import-status').html(statsHtml);
+            updateProductStatistics(data.stats);
         }
-        
-        // Start the sync
-        processSyncChunk(0);
+    });
+
+    // Initialize existing users sync handler
+    new ChunkedOperation({
+        action: 'edge_sync_existing_users',
+        buttonId: '#sync-existing-users',
+        statusId: '#sync-existing-status',
+        progressContainerId: '#sync-progress-container',
+        progressBarId: '#sync-progress-bar',
+        progressTextId: '#sync-progress-text',
+        onComplete: (data) => {
+            const statsHtml = `
+                <p>Existing users sync completed successfully.</p>
+                <ul>
+                    <li>Total Users Checked: ${data.stats.total}</li>
+                    <li>Already Synced: ${data.stats.already_synced}</li>
+                    <li>Newly Synced to EDGE: ${data.stats.synced}</li>
+                    <li>Skipped: ${data.stats.skipped}</li>
+                </ul>`;
+            $('#sync-existing-status').html(statsHtml);
+        }
     });
 }); 
