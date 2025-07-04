@@ -180,6 +180,7 @@ class Wdm_Edge_Settings_Manager {
 				// Schedule a new event
 				$interval = get_option('edge_product_cron_interval', 'daily');
 				$result = wp_schedule_event(time(), $interval, 'edge_scheduled_product_import');
+				
 			}
 		}
 		
