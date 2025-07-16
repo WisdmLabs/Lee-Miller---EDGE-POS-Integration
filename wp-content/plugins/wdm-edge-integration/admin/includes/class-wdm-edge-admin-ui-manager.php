@@ -100,6 +100,16 @@ class Wdm_Edge_Admin_UI_Manager {
 			'edt-sync-products',
 			array( $this, 'render_edt_sync_products_page' )
 		);
+		
+		// Add submenu for vendor settings
+		add_submenu_page(
+			'edt-sync',
+			'EDT Sync - Vendor Settings',
+			'Vendor Settings',
+			'manage_options',
+			'edt-sync-vendor-settings',
+			array( $this, 'render_edt_sync_vendor_settings_page' )
+		);
 	}
 
 	/**
@@ -282,6 +292,41 @@ class Wdm_Edge_Admin_UI_Manager {
 		
 		echo '</div>'; // Close wrap container
 		$this->enqueue_import_script();
+	}
+	
+	/**
+	 * Render the EDT Sync Vendor Settings page.
+	 */
+	public function render_edt_sync_vendor_settings_page() {
+		echo '<div class="wrap edt-sync-container edt-sync-vendor-settings-page">';
+		echo '<h1 class="wp-heading-inline">EDT Sync Dashboard - Vendor Settings</h1>';
+		echo '<hr class="wp-header-end">';
+		
+		// Vendor settings section
+		echo '<div class="edt-card">';
+		echo '<h2>Vendor Configuration</h2>';
+		echo '<div class="edt-card-content">';
+		echo '<p>Configure the vendor ID that will be used when syncing customers to EDGE.</p>';
+		
+		// Get current vendor ID setting
+		$vendor_id = get_option('edge_vendor_id', 0);
+		
+		echo '<form method="post" action="options.php">';
+		settings_fields('edge_vendor_options');
+		
+		echo '<div class="edt-form-row">';
+		echo '<label for="edge_vendor_id">Vendor ID</label>';
+		echo '<input type="number" id="edge_vendor_id" name="edge_vendor_id" value="' . esc_attr($vendor_id) . '" min="0" step="1">';
+		echo '<p class="description">Enter the vendor ID number that will be assigned to customers when syncing to EDGE. This must be a valid integer value.</p>';
+		echo '</div>';
+		
+		echo '<button type="submit" class="edt-button">Save Vendor Settings</button>';
+		echo '</form>';
+		
+		echo '</div>'; // End card content
+		echo '</div>'; // End card
+		
+		echo '</div>'; // Close wrap container
 	}
 	
 	/**
