@@ -1197,7 +1197,7 @@ class Wdm_Edge_Customer_Manager {
 								"WebTransferRequiresEdgeAttention" => false,
 								"WebTransferType" => 0,
 								"WebTransferLinkedWebID" => "",
-								"WebTransferVendorID" => 0
+								"WebTransferVendorID" => get_option('edge_vendor_id', 0)
 							)
 						)
 					)

@@ -74,6 +74,11 @@ class Wdm_Edge_Settings_Manager {
         
         // Sync existing users settings
         register_setting( 'edge_sync_existing_options', 'edge_sync_existing_chunk_size' );
+        
+        // Vendor settings group
+        register_setting( 'edge_vendor_options', 'edge_vendor_id', array(
+			'sanitize_callback' => array($this, 'sanitize_vendor_id'),
+		));
 	}
 
 	/**
@@ -416,6 +421,22 @@ class Wdm_Edge_Settings_Manager {
 		);
 		
 		return $schedules;
+	}
+
+	/**
+	 * Sanitize the vendor ID setting.
+	 *
+	 * @param mixed $value The vendor ID value to sanitize.
+	 * @return int The sanitized vendor ID value.
+	 */
+	public function sanitize_vendor_id($value) {
+		// Convert to integer and ensure it's not negative
+		$vendor_id = intval($value);
+		if ($vendor_id < 0) {
+			$vendor_id = 0;
+		}
+		
+		return $vendor_id;
 	}
 
 } 
